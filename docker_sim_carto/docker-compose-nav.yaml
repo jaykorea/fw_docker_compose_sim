@@ -1,0 +1,271 @@
+version: "2"
+
+# networks:
+#   my-net:
+#     external: true
+#     name: my-net
+#   ros_net:
+#     driver: bridge
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 192.168.0.0/24
+#           gateway: 192.168.0.1
+
+services:
+  ros_core_sim_carto:
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    container_name: ros_core_sim_carto
+    hostname: ros_core_sim_carto
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_sim_carto"
+      - "ROS_IP=localhost"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    volumes:
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      # - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_slam:/home/freeway_rev04/src/fw_slam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+      # - "/tmp/argus_socket:/tmp/argus_socket"
+      #- "/tmp/.X11-unix/:/tmp/.X11-unix:rw"
+      #- "/tmp/.docker.xauth:/tmp/.docker.xauth:rw"
+    command: ["/bin/zsh", "-c", "source /opt/ros/melodic/setup.zsh; source ~/.zshrc; roscore;"]
+    # networks:
+    #   ros_net:
+    #     ipv4_address: localhost
+        # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    # ipc: host
+    #restart: unless-stopped
+
+  fw_init_sim_carto:
+    # build: ,,
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    depends_on:
+        - ros_core_sim_carto
+    # networks:
+    #   ros_net:
+    #     ipv4_address: 192.168.0.11
+      # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    #restart: unless-stopped
+    # ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    privileged: true
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_sim_carto"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    # command: zsh
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      #  - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_sim:/home/freeway_rev04/src/fw_sim"
+      - "~/docker_compose/docker_sim_carto/launch/fw_description:/home/freeway_rev04/src/fw_description"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_slam:/home/freeway_rev04/src/fw_slam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_rtabmap:/home/freeway_rev04/src/fw_rtabmap"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+    command: ["/bin/zsh", "-c", "source /root/.zshrc; source /usr/share/gazebo/setup.sh; roslaunch --wait fw_rev_04_sim fw_cafe.launch;"]
+
+  fw_cam_sim_carto:
+    # build: ,,
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    depends_on:
+        - ros_core_sim_carto
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t  
+    # networks:
+    #   ros_net:
+    #     ipv4_address: 192.168.0.12
+      # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    # ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    privileged: true
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_sim_carto"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    # command: zsh
+    volumes:
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      # - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_slam:/home/freeway_rev04/src/fw_slam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+    command: ["/bin/zsh", "-c", "source /root/.zshrc; roslaunch --wait fw_rev_04_cam launch_d455_ekf_wheel_imu_jay_sim.launch;"]
+
+  fw_gmap_sim_carto:
+    # build: ,,
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    depends_on:
+        - ros_core_sim_carto
+    # networks:
+    #   ros_net:
+    #     ipv4_address: 192.168.0.14
+      # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    # ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t    
+    privileged: true
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_sim_carto"
+      - "ROS_MASTER_URI=http://localhost:11311"
+      - "MAP_TYPE=$MAP_TYPE"
+      - "MAP_FILE=$MAP_FILE"
+      - "MAP_MODE=$MAP_MODE"
+    # command: zsh
+    volumes:
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      # - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_rtabmap:/home/freeway_rev04/src/fw_rtabmap"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+      - "~/docker_compose/docker_sim_carto/launch/fw_slam:/home/freeway_rev04/src/fw_slam"
+    command: ["/bin/zsh", "-c", "source /opt/ros/melodic/setup.zsh; source ~/.zshrc; roslaunch --wait fw_rev_04_navigation fw_navigation_${MAP_TYPE}_${MAP_MODE}.launch map_file:=/robot/map/${MAP_FILE}.yaml"]
+
+  fw_navigation_sim_carto:
+    # build: ,,
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    depends_on:
+        - ros_core_sim_carto
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t    
+    # networks:
+    #   ros_net:
+    #     ipv4_address: 192.168.0.13
+      # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    # ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    privileged: true
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_sim_carto"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    # command: zsh
+    volumes:
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      # - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_slam:/home/freeway_rev04/src/fw_slam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+    command: ["/bin/zsh", "-c", "source /root/.zshrc; roslaunch --wait fw_rev_04_navigation fw_move_base_flex.launch;"]
+
+  fw_bt_carto:
+    # build: ,,
+    image: jaykor97/freeway:rev.05_jay_gazebo_carto
+    depends_on:
+        - ros_core_carto
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t    
+    # networks:
+    #   ros_net:
+    #     ipv4_address: 192.168.0.13
+      # my-net:
+      #   ipv4_address: 192.168.0.10
+    network_mode: host
+    # ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    privileged: true
+    environment:
+      - "NVIDIA_DRIVER_CAPABILITIES=all"
+      - "DISPLAY=$DISPLAY"
+      - "QT_X11_NO_MITSHM=1"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      # - "ROS_HOSTNAME=ros_core_carto"
+      - "ROS_MASTER_URI=http://localhost:11311"
+    # command: zsh
+    volumes:
+      - "/dev:/dev"
+      - "~/docker_compose/docker_sim_carto/data:/data"
+      - "~/docker_compose/docker_sim_carto/map:/robot/map"
+      # - "~/docker_compose/docker_sim_carto/param:/robot/param"
+      - "~/docker_compose/docker_sim_carto/launch/fw_init:/home/freeway_rev04/src/fw_init"
+      - "~/docker_compose/docker_sim_carto/launch/fw_cam:/home/freeway_rev04/src/fw_cam"
+      - "~/docker_compose/docker_sim_carto/launch/fw_navigation:/home/freeway_rev04/src/fw_navigation"
+      - "~/docker_compose/docker_sim_carto/launch/fw_bt:/home/freeway_rev04/src/fw_bt"
+    command: ["/bin/zsh", "-c", "source /root/.zshrc; roslaunch --wait fw_bt bt_sample.launch;"]

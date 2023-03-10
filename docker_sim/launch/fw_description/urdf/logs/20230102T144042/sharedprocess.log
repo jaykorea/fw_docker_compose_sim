@@ -1,0 +1,7 @@
+2023-01-02 14:40:43.744 [info] Starting worker process with pid 6545 (type: fileWatcher, window: 1).
+2023-01-02 15:05:56.072 [info] Getting Manifest... smilerobotics.urdf
+2023-01-02 15:05:56.076 [info] Installing extension: smilerobotics.urdf
+2023-01-02 15:05:59.363 [info] Extracted extension to /root/.vscode/extensions/.0fd6810d-22af-4e9e-94f8-a05b87e179ba: smilerobotics.urdf
+2023-01-02 15:05:59.367 [info] Renamed to /root/.vscode/extensions/smilerobotics.urdf-0.3.0
+2023-01-02 15:05:59.368 [info] Extracting completed. smilerobotics.urdf
+2023-01-02 15:05:59.374 [info] Extension installed successfully: smilerobotics.urdf

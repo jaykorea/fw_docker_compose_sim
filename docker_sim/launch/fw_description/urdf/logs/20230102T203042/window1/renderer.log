@@ -1,0 +1,8 @@
+2023-01-02 20:30:42.770 [info] Initial editor state {"filesToOpenOrCreate":[{"fileUri":{"$mid":1,"path":"/directory-to-open","scheme":"file"},"type":1,"exists":false}],"filesToDiff":[],"filesToMerge":[]}
+2023-01-02 20:30:45.706 [info] [perf] Render performance baseline is 26ms
+2023-01-03 04:32:56.506 [error] Unable to read file '/home/freeway_rev04/src/FREEWAY_AGX/fw_description/urdf/sim/fw_rev_04_jay_sim.urdf.xacro' (Error: File not modified since): Error: Unable to read file '/home/freeway_rev04/src/FREEWAY_AGX/fw_description/urdf/sim/fw_rev_04_jay_sim.urdf.xacro' (Error: File not modified since)
+    at h.v (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:616:16493)
+    at async v.H (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:2491:34436)
+    at async v.readStream (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:2491:34131)
+    at async Ms.Ab (vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:2480:54169)
+    at async vscode-file://vscode-app/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:2491:30190

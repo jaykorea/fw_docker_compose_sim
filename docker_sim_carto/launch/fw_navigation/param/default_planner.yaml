@@ -1,0 +1,4 @@
+base_global_planner: GlobalPlannerAdapter
+# GlobalPlanner RRTStarPlanner RRTGlobalPlanner SBPLLatticePlanner GlobalPlannerAdapter
+base_local_planner: LocalPlannerAdapter
+#base_local_planner: DWAPlannerROS MpcLocalPlannerROS EBandPlannerROS  TebLocalPlannerROS LocalPlannerAdapter

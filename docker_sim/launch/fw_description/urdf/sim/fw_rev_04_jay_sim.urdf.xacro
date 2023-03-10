@@ -1,0 +1,396 @@
+<?xml version="1.0"?>
+<robot name="freeway_hotel_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="bodyHeight" value="0.32631771"/>
+  <xacro:property name="bodyLength" value="0.6"/>
+  <xacro:property name="bodyWidth" value="0.50544397"/>
+  <xacro:property name="bodyMass" value="25"/>
+
+  <!-- <xacro:arg name="use_nominal_extrinsics" default="true"/> -->
+  <!-- <xacro:include filename="$(find fw_rev_04_description)/urdf/_d455.urdf.xacro" /> -->
+  <xacro:include filename="$(find fw_rev_04_description)/urdf/sim/materials.xacro"/>
+  <xacro:include filename="$(find fw_rev_04_description)/urdf/sim/fw_rev_04_jay_sim.gazebo.xacro"/>
+
+  <link name="base_footprint"/>
+  
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+    <origin xyz="0 0 0.085" rpy="0 0 0"/> 
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fw_rev_04_description/meshes/bases/Freeway_Hotel_flatdualcam_low_lidar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0 0.085" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.48 0.48 0.25"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="-0.040773 0 0.011167" rpy="0 0 0"/>
+      <mass value="25"/>
+      <inertia ixx="0.52919588592" ixy="0.0" ixz="0.01168770453"
+               iyy="0.79904628331" iyz="0.0"
+               izz="1.16877045348" />
+    </inertial>
+  </link>
+
+  <!-- <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="-0.27 0 0.175" rpy="0 0 0"/>
+  </joint>
+
+  <link name="imu_link"/> -->
+
+  <joint name="scan_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_scan"/>
+    <origin xyz="0.2215 0 0.011" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_scan">
+  <visual>
+    <origin xyz="0 0 0" rpy="-${PI/2} 0 -${PI }"/>
+    <geometry>
+      <mesh filename="package://fw_rev_04_description/meshes/sensors/rplidar_s2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="blue"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="0.0315" radius="0.04"/>
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.114" />
+    <origin xyz="0 0 0" />
+    <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+             iyy="0.001" iyz="0.0"
+             izz="0.001" />
+  </inertial>
+  </link>
+
+  <!-- <joint name="scan_joint2" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_scan_rp_filtered"/>
+    <origin xyz="0.135 0 0.22" rpy="0 0 3.14"/>
+  </joint>
+
+  <link name="base_scan_rp_filtered">
+  <visual>
+    <origin xyz="0 0 0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://fw_rev_04_description/meshes/sensors/lds.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="plastic"/>
+  </visual>
+  <collision>
+    <origin xyz="0.015 0 -0.0065" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="0.0315" radius="0.055"/>
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.114" />
+    <origin xyz="0 0 0" />
+    <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+             iyy="0.001" iyz="0.0"
+             izz="0.001" />
+  </inertial>
+  </link> -->
+
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left_link"/>
+    <origin xyz="0.0 0.205 0.0" rpy="-1.57 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="wheel_left_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.044" radius="0.085"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.044" radius="0.085"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="3.75" />
+      <inertia ixx="${3.75*(3*0.085*0.085+0.044*0.044)/12}" ixy="0" ixz="0"
+               iyy="${3.75*(3*0.085*0.085+0.044*0.044)/12}" iyz="0"
+               izz="${3.75*0.085*0.085/2}" />
+      </inertial>
+  </link>
+
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right_link"/>
+    <origin xyz="0.0 -0.205 0.0" rpy="-1.57 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="wheel_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.044" radius="0.085"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.044" radius="0.085"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="3.75" />
+      <inertia ixx="${3.75*(3*0.085*0.085+0.044*0.044)/12}" ixy="0" ixz="0"
+               iyy="${3.75*(3*0.085*0.085+0.044*0.044)/12}" iyz="0"
+               izz="${3.75*0.085*0.085/2}" />
+      </inertial>
+  </link>
+
+  <joint name="caster_back_right_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_back_right_link"/>
+    <origin xyz="-0.295 -0.145 -0.0525" rpy="-1.57 0 0"/>
+    <!-- <axis xyz="0 0 1"/> -->
+  </joint>
+
+  <link name="caster_back_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.05" />
+      <inertia ixx="${2*0.05*0.03*0.03/5}" ixy="0.0" ixz="0.0"
+               iyy="${2*0.05*0.03*0.03/5}" iyz="0.0"
+               izz="${2*0.05*0.03*0.03/5}" />
+    </inertial>
+  </link>
+
+  <joint name="caster_back_left_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_back_left_link"/>
+    <origin xyz="-0.295 0.145 -0.0525" rpy="-1.57 0 0"/>
+    <!-- <axis xyz="0 0 1"/> -->
+  </joint>
+
+  <link name="caster_back_left_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.05" />
+      <inertia ixx="${2*0.05*0.03*0.03/5}" ixy="0.0" ixz="0.0"
+               iyy="${2*0.05*0.03*0.03/5}" iyz="0.0"
+               izz="${2*0.05*0.03*0.03/5}" />
+    </inertial>
+  </link>
+
+  <!-- <joint name="caster_back_joint_center" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_back_link_center"/>
+    <origin xyz="-0.295 0 -0.0525" rpy="-1.57 0 0"/>
+  </joint>
+
+  <link name="caster_back_link_center">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0325"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.05" />
+      <inertia ixx="${2*0.05*0.0325*0.0325/5}" ixy="0.0" ixz="0.0"
+               iyy="${2*0.05*0.0325*0.0325/5}" iyz="0.0"
+               izz="${2*0.05*0.0325*0.0325/5}" />
+    </inertial>
+  </link> -->
+  <!-- <joint name="d455_with_t265_mount" type="fixed">
+    <parent link="base_link"/>
+    <child link="d455_with_t265_mount"/>
+    <origin xyz="0.108 0 0.166" rpy="0 0 0"/>
+  </joint>
+
+  <link name="d455_with_t265_mount">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://fw_rev_04_description/meshes/sensors/mount.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link> -->
+
+  <!-- <joint name="t265_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="t265_pose_frame"/>
+    <origin xyz="0.145 0.01 0.37" rpy="0 -0.139626 0"/>
+  </joint>
+
+  <link name="t265_pose_frame">
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://fw_rev_04_description/meshes/sensors/t265.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="aluminum"/>
+    </visual>
+  </link>
+
+  <joint name="t265_link_joint" type="fixed">
+    <parent link="t265_pose_frame"/>
+    <child link="t265_link"/>
+  </joint>
+
+  <link name="t265_link"/> -0.139626-->
+
+  <!-- <joint name="d400_link_to_base_link_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="d400_link"/>
+    <origin xyz="0.09 0.012 0.245" rpy="0 0 0"/>
+  </joint>
+
+  <link name="d400_link">
+    <visual>
+      <origin xyz="0 -0.012 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://fw_rev_04_description/meshes/sensors/d455.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="aluminum"/>
+    </visual>
+  </link> -->
+
+  <!-- <xacro:sensor_d455 parent="base_link" name="d455_R" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0.118 -0.0741 0.213" rpy="0 0 -0.523599"/>
+  </xacro:sensor_d455>
+
+  <xacro:sensor_d455 parent="base_link" name="d455_L" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0.118 0.0741 0.213" rpy="0 0 0.523599"/>
+  </xacro:sensor_d455> -->
+
+  <!-- <xacro:include filename="$(find fw_rev_04_description)/urdf/sim/_d455_sim.urdf.xacro" />
+  <xacro:sensor_d455 parent="base_link" name="d455_R" topics_ns="d455_R" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0.118 -0.0741 0.213" rpy="0 0 -0.523599"/>
+  </xacro:sensor_d455>
+
+  <xacro:sensor_d455 parent="base_link" name="d455_L" topics_ns="d455_L" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0.118 0.0741 0.213" rpy="0 0 0.523599"/>
+  </xacro:sensor_d455>
+   -->
+
+  <xacro:include filename="$(find fw_rev_04_description)/urdf/sim/_d455i.urdf.xacro"/>
+  <xacro:sensor_d455i parent="base_link" name="d455_L" topics_ns="d455_L"
+                      enable_pointCloud="true"
+                      clip_distance="-1.0"
+                      align_depth="true"
+                      visualize="false"
+
+                      enable_imu="false"
+                      unite_imu_method="false"
+                      accel_fps="62"
+                      gyro_fps="200"
+
+                      depth_width="640"
+                      depth_height="480"
+                      depth_fps="30"
+
+                      infra_width="640"
+                      infra_height="480"
+                      infra_fps="60"
+
+                      color_width="640"
+                      color_height="480"
+                      color_fps="30"
+                      >
+    <origin xyz="0.118 0.0741 0.213" rpy="0 0 0.523599"/>
+  </xacro:sensor_d455i>
+
+  <xacro:sensor_d455i parent="base_link" name="d455_R" topics_ns="d455_R"
+                      enable_pointCloud="true"
+                      clip_distance="-1.0"
+                      align_depth="true"
+                      visualize="false"
+
+                      enable_imu="true"
+                      unite_imu_method="linear_interpolation"
+                      accel_fps="62"
+                      gyro_fps="200"
+
+                      depth_width="640"
+                      depth_height="480"
+                      depth_fps="30"
+
+                      infra_width="640"
+                      infra_height="480"
+                      infra_fps="60"
+
+                      color_width="640"
+                      color_height="480"
+                      color_fps="30"
+                      >
+    <origin xyz="0.118 -0.0741 0.213" rpy="0 0 -0.523599"/>
+  </xacro:sensor_d455i>
+
+</robot>
+<!-- depth_width="640" depth_height="480" depth_fps="30" color_width="640" color_height="480" color_fps="30" align_depth="true" enable_pointCloud="true" unite_imu_method="linear_interpolation" -->

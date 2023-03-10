@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+source /home/fw05/.zshrc
+
+#KILL ALL
+for pid in $(pgrep ros) ; do
+    kill ${pid} && echo "killed ${pid}"
+done

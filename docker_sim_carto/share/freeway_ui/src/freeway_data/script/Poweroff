@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+source /home/fw05/.zshrc
+
+echo "Launching Application, please wait!"
+
+gnome-terminal --geometry=40x40  \
+--tab --title="Power Off" -e "zsh -c \"poweroff;exec zsh\"" \
+#--tab --title="ros master kill" -e "zsh -c \"sleep 5s;killall -9 rosmaster;exec zsh\"" \
+#--tab --title="ros core kill" -e "zsh -c \"sleep 5s;killall -9 roscore;exec zsh\""

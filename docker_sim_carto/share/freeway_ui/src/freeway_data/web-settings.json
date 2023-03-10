@@ -1,0 +1,15 @@
+{
+  "gridUnitMeter": 10,
+  "pathNodeSizeMeter": 0.5,
+  "robotSizeMeter": 0.5,
+  "linkWidthMeter": 0.05,
+  "gridPoseZMeter": 0.1,
+  "nodeMoveUnit": 0.5,
+  "nodeRotationUnit": 5,
+  "statusPoseMonitoringPeriod": 200,
+  "scanMonitoringPeriod": 200,
+  "manualDriveSamplingPeriod": 200,
+  "jogMaxLinearSpeed": 0.3,
+  "jogMaxAngularSpeed": 0.45,
+  "mapImageTextureSize": "4000"
+}

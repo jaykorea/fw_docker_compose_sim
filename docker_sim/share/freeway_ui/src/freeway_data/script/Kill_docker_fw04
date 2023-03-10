@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+source /home/fw05/.zshrc
+
+#Container down
+gnome-terminal --geometry=1280x800 \
+--tab --title="docker_down" -e "zsh -c \"cd /home/fw05/docker_compose/docker_fw04; source /home/fw05/.zshrc; docker-compose down;exec zsh\""
